@@ -1,6 +1,5 @@
 -- set leader key to space
-vim.g.mapleader = " "
-
+vim.g.mapleader = " " 
 local keymap = vim.keymap -- for conciseness
 local status_ok, which_key = pcall(require, "which-key")
 if not status_ok then
@@ -190,7 +189,7 @@ local mappings = {
     R = { "<cmd>Telescope registers<cr>", "Registers" },
     k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
     C = { "<cmd>Telescope commands<cr>", "Commands" },
-  },
+  }, 
 -- Terminal
   t = {
     name = "Terminal",
@@ -233,7 +232,7 @@ keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab
 keymap.set("n", "<leader>tk", ":tabn<CR>") --  go to next tab
 keymap.set("n", "<leader>tj", ":tabp<CR>") --  go to previous tab
 --run python files
-keymap.set("n","<leader>x",":terminal python3 %<CR>")
+keymap.set("n","<leader>x",":terminal python3<CR>")
 ----------------------
 -- Plugin Keybinds
 ----------------------
@@ -260,6 +259,16 @@ keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>") -- list current c
 
 -- restart lsp server (not on youtube nvim video)
 keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
+-- Move line up and down
+local line_opts = { noremap = true, silent = true }
+
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", line_opts)
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", line_opts)
+
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", line_opts) 
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", line_opts)
+
+vim.keymap.set("x", "p", '"_dP', line_opts)
 -- change btn buffers
 vim.cmd[[
 nnoremap <silent><TAB> :BufferLineCycleNext<CR>
@@ -267,3 +276,4 @@ nnoremap <silent><TAB> :BufferLineCycleNext<CR>
 -- nnoremap <silent><S-TAB> :BufferLineCyclePrev<CR>
 which_key.setup(setup)
 which_key.register(mappings, opts)
+
