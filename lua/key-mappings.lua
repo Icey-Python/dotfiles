@@ -232,7 +232,7 @@ keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab
 keymap.set("n", "<leader>tk", ":tabn<CR>") --  go to next tab
 keymap.set("n", "<leader>tj", ":tabp<CR>") --  go to previous tab
 --run python files
-keymap.set("n","<leader>x",":terminal python3<CR>")
+keymap.set("n","<leader>x",":terminal python3")
 ----------------------
 -- Plugin Keybinds
 ----------------------
@@ -259,6 +259,10 @@ keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>") -- list current c
 
 -- restart lsp server (not on youtube nvim video)
 keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
+
+--CPP CODE RUNNER
+keymap.set("n", "<S-x>", ":!g++ -std=c++11 % -o %:r<CR>:! ./%:r<CR>")
+
 -- Move line up and down
 local line_opts = { noremap = true, silent = true }
 
