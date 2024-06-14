@@ -11,5 +11,8 @@ require("chatgpt-config")
 require("lsp.mason")
 require("lsp.lspconfig")
 require("lsp.lspsaga")
+
+-- formatter
+require("lsp.formatter")
 -- require("lsp.null-ls")
 require("gitsigns")

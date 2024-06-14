@@ -46,6 +46,7 @@ use("nvim-lua/plenary.nvim") -- lua functions that many plugins use
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
 	end
+
 -- Install Which Key
   	use ("folke/which-key.nvim")
 -- fuzzy finding w/ telescope
@@ -93,6 +94,14 @@ use("nvim-lua/plenary.nvim") -- lua functions that many plugins use
   use("hrsh7th/nvim-cmp") -- completion plugin
   use("hrsh7th/cmp-buffer") -- source for text in buffer
   use("hrsh7th/cmp-path") -- source for file system paths
+
+  -- code formatter 
+  use({
+    "stevearc/conform.nvim",
+    config = function()
+      require("conform").setup()
+    end,
+  })
   -- gpt 
 use({
   "jackMort/ChatGPT.nvim",

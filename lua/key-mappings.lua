@@ -1,5 +1,5 @@
 -- set leader key to space
-vim.g.mapleader = " " 
+vim.g.mapleader = " "
 local keymap = vim.keymap -- for conciseness
 local status_ok, which_key = pcall(require, "which-key")
 if not status_ok then
@@ -97,7 +97,7 @@ local mappings = {
     "Find files",
   },
   -- CHATGPT
-  c = {
+  cg = {
   name = "ChatGPT",
     c = { "<cmd>ChatGPT<CR>", "ChatGPT" },
     e = { "<cmd>ChatGPTEditWithInstruction<CR>", "Edit with instruction", mode = { "n", "v" } },
@@ -126,25 +126,9 @@ local mappings = {
 
   g = {
     name = "Git",
-   g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
-    j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
-    k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
-    l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
-    p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-    r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-    R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-    s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-    u = {
-      "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-      "Undo Stage Hunk",
-    },
     o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
     b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-    c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
-    d = {
-      "<cmd>Gitsigns diffthis HEAD<cr>",
-      "Diff",
-    },
+    cs = { "<cmd>Telescope git_commits<cr>", "Checkout commit" }, 
   },
 -- Language Server Protocol (LSP)
   l = {
@@ -181,7 +165,6 @@ local mappings = {
   --Telescope
   s = {
     name = "Search",
-    b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
     c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
     h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
     M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
@@ -189,19 +172,12 @@ local mappings = {
     R = { "<cmd>Telescope registers<cr>", "Registers" },
     k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
     C = { "<cmd>Telescope commands<cr>", "Commands" },
-  }, 
+  },
 -- Terminal
   t = {
     name = "Terminal",
-    n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
-    u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
-    t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
-    p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
-    f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
-    h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
-    v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
+    n = {"<cmd> terminal","new terminal"}
   },
-  keymap.set('n','x','"_x')
 }
 
 ---------------------
@@ -232,7 +208,7 @@ keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab
 keymap.set("n", "<leader>tk", ":tabn<CR>") --  go to next tab
 keymap.set("n", "<leader>tj", ":tabp<CR>") --  go to previous tab
 --run python files
-keymap.set("n","<leader>x",":terminal python3")
+keymap.set("n","<leader>xp",":terminal python3")
 ----------------------
 -- Plugin Keybinds
 ----------------------
@@ -269,7 +245,7 @@ local line_opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", line_opts)
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", line_opts)
 
-vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", line_opts) 
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", line_opts)
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", line_opts)
 
 vim.keymap.set("x", "p", '"_dP', line_opts)
