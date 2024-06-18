@@ -6,7 +6,7 @@ require("gui-options")
 require("lualine-config")
 require("telescope")
 require("autocompletions")
-require("chatgpt-config")
+-- require("chatgpt-config")
 --lsp autocomplete:
 require("lsp.mason")
 require("lsp.lspconfig")
