@@ -142,7 +142,16 @@ use({
             { 'mlaursen/vim-react-snippets' }
         }
     }
-
+use {
+  'Exafunction/codeium.vim',
+  config = function ()
+    -- Change '<C-g>' here to any keycode you like.
+    vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+    vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
+    vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
+    vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+  end
+}
  -- configuring lsp servers
   -- use("neovim/nvim-lspconfig") -- easily configure language servers
   use("hrsh7th/cmp-nvim-lsp") -- for autocompletion
@@ -161,7 +170,7 @@ use({
     use("eandrju/cellular-automaton.nvim")
     use("laytan/cloak.nvim")
     use("bluz71/vim-nightfly-colors")
-    
+
     use({ "windwp/nvim-ts-autotag", after = "nvim-treesitter" }) -- autoclose tags
 
     use("onsails/lspkind.nvim") -- vs-code like icons for autocompletion

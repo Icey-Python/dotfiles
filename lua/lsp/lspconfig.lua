@@ -81,7 +81,11 @@ lspconfig["tailwindcss"].setup({
   capabilities = capabilities,
   on_attach = on_attach,
 })
-
+-- configure dart server
+lspconfig["dartls"].setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
 -- configure emmet language server
 lspconfig["emmet_ls"].setup({
   capabilities = capabilities,

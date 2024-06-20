@@ -18,7 +18,8 @@ lsp.ensure_installed({
 	"gopls",
 	"rust_analyzer",
 	"tailwindcss",
-	"lua_ls"
+	"lua_ls",
+  "dartls"
 })
 
 -- Fix Undefined global 'vim'
