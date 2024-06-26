@@ -157,6 +157,11 @@ _G.packer_plugins = {
     path = "/home/kelly/.local/share/nvim/site/pack/packer/start/harpoon",
     url = "https://github.com/theprimeagen/harpoon"
   },
+  ["lavi.nvim"] = {
+    loaded = true,
+    path = "/home/kelly/.local/share/nvim/site/pack/packer/start/lavi.nvim",
+    url = "https://github.com/b0o/lavi.nvim"
+  },
   ["lsp-zero.nvim"] = {
     loaded = true,
     path = "/home/kelly/.local/share/nvim/site/pack/packer/start/lsp-zero.nvim",
@@ -176,6 +181,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/kelly/.local/share/nvim/site/pack/packer/start/lualine.nvim",
     url = "https://github.com/nvim-lualine/lualine.nvim"
+  },
+  ["lush.nvim"] = {
+    loaded = true,
+    path = "/home/kelly/.local/share/nvim/site/pack/packer/start/lush.nvim",
+    url = "https://github.com/rktjmp/lush.nvim"
   },
   ["mason-lspconfig.nvim"] = {
     loaded = true,

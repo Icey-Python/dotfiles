@@ -170,7 +170,9 @@ use {
     use("eandrju/cellular-automaton.nvim")
     use("laytan/cloak.nvim")
     use("bluz71/vim-nightfly-colors")
-
+    -- Lavi colorscheme
+    use('rktjmp/lush.nvim')
+    use('b0o/lavi.nvim')
     use({ "windwp/nvim-ts-autotag", after = "nvim-treesitter" }) -- autoclose tags
 
     use("onsails/lspkind.nvim") -- vs-code like icons for autocompletion
