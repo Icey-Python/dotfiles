@@ -1,6 +1,6 @@
 -- GUI CONFIGURATIONS
 -- Colorscheme default
-vim.cmd [[colorscheme rose-pine-moon]]
+vim.cmd [[colorscheme retrobox]]
 
 -- Italize comments
 vim.g.nightflyItalics = false
