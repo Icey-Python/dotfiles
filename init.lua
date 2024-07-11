@@ -10,7 +10,8 @@ require("autocompletions")
 require("lsp.mason")
 require("lsp.lspconfig")
 require("lsp.lspsaga")
-
+-- flutter tools
+require('lsp.flutter-config')
 -- formatter
 require("lsp.formatter")
 require("gitsigns")

@@ -102,6 +102,18 @@ use("nvim-lua/plenary.nvim") -- lua functions that many plugins use
       require("conform").setup()
     end,
   })
+  -- flutter tools
+  use {
+    'akinsho/flutter-tools.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim',
+    },
+    config = function()
+      require('flutter-tools').setup{} -- Adjust configuration as needed
+    end
+  }
+
   -- gpt 
 use({
   "jackMort/ChatGPT.nvim",
