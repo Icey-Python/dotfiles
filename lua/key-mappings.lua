@@ -258,6 +258,8 @@ nnoremap <silent><TAB> :BufferLineCycleNext<CR>
 
 --formatter
 keymap.set("n", "<leader>f", "<cmd> lua vim.lsp.buf.format()<CR>", { noremap = true, silent = true })
+keymap.set("n", "<leader>fr", "<cmd> :FlutterReload", { noremap = true, silent = true })
+
 -- nnoremap <silent><S-TAB> :BufferLineCyclePrev<CR>
 which_key.setup(setup)
 which_key.register(mappings, opts)
