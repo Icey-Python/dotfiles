@@ -200,4 +200,16 @@ use("szw/vim-maximizer") -- maximizes and restores current window
   use("inkarkat/vim-ReplaceWithRegister") -- replace with register contents using motion (gr + motion)
  -- commenting with gc
   use("numToStr/Comment.nvim")
+ -- ray-x 
+ use{
+   "ray-x/lsp_signature.nvim",
+   config = function()
+     require("lsp_signature").setup({
+       bind = true,
+       handler_opts = {
+         border = "rounded",
+       },
+     })
+   end
+ }
 end)

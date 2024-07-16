@@ -90,7 +90,7 @@ local mappings = {
 	["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
 	["w"] = { "<cmd>w!<CR>", "Save" },
 	["q"] = { "<cmd>q!<CR>", "Quit" },
-	["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
+	["c"] = { "<cmd>bdelete!<CR>", "Close Buffer" },
 	["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
 	["sf"] = {
 		"<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
@@ -176,7 +176,7 @@ local mappings = {
 	-- Terminal
 	t = {
 		name = "Terminal",
-		n = { "<cmd> terminal", "new terminal" },
+		n = { "<cmd> terminal<CR>", "new terminal" },
 	},
 }
 
@@ -258,8 +258,16 @@ nnoremap <silent><TAB> :BufferLineCycleNext<CR>
 
 --formatter
 keymap.set("n", "<leader>f", "<cmd> lua vim.lsp.buf.format()<CR>", { noremap = true, silent = true })
-keymap.set("n", "<leader>fr", "<cmd> :FlutterReload", { noremap = true, silent = true })
+keymap.set("n", "<leader>fr", "<cmd> :FlutterReload <CR>", { noremap = true, silent = true })
+-- go to definition telescope 
+keymap.set("n", "vd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
+-- view error 
+keymap.set("n", "ve", "<cmd>lua vim.diagnostic.open_float({border='rounded',scope='line'})<CR>", { noremap = true, silent = true })
 
--- nnoremap <silent><S-TAB> :BufferLineCyclePrev<CR>
+-- code actions Alt + a 
+keymap.set("n", "<leader>da", "<cmd>lua vim.lsp.buf.code_action()<CR>", { noremap = true, silent = true })
+-- display wakatime today 
+keymap.set("n", "<leader>ct", "<cmd>WakaTimeToday<CR>", { noremap = true, silent = true })
+
 which_key.setup(setup)
 which_key.register(mappings, opts)
