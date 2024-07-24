@@ -6,4 +6,4 @@
 - nodejs
 - API token from Codeium
 - flutter snap (remember to update the path to the binary)
-
+- create a venv first for black(python) installation
