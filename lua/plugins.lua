@@ -164,6 +164,8 @@ use {
     vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
   end
 }
+  -- configures python syntax highlighting
+  use("numirias/semshi")
  -- configuring lsp servers
   -- use("neovim/nvim-lspconfig") -- easily configure language servers
   use("hrsh7th/cmp-nvim-lsp") -- for autocompletion
@@ -198,8 +200,12 @@ use("szw/vim-maximizer") -- maximizes and restores current window
   -- essential plugins
   use("tpope/vim-surround") -- add, delete, change surroundings (it's awesome)
   use("inkarkat/vim-ReplaceWithRegister") -- replace with register contents using motion (gr + motion)
- -- commenting with gc
+-- cattapucini theme 
+ use{"catppuccin/nvim", lazy = true, name = "catppuccin", priority=1000}
+  -- commenting with gc
   use("numToStr/Comment.nvim")
+ -- mini icons 
+ use{'echasnovski/mini.nvim', version = false}
  -- ray-x 
  use{
    "ray-x/lsp_signature.nvim",
