@@ -165,7 +165,6 @@ use {
   end
 }
   -- configures python syntax highlighting
-  use("numirias/semshi")
  -- configuring lsp servers
   -- use("neovim/nvim-lspconfig") -- easily configure language servers
   use("hrsh7th/cmp-nvim-lsp") -- for autocompletion
