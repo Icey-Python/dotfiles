@@ -31,7 +31,6 @@ vim.cmd([[highlight Normal guibg=NONE ctermbg=NONE]])
 vim.cmd([[
   highlight WinSeparator guibg=NONE guifg=NONE
 ]])
---make buffers transparent
 -- Make bufferline transparent
 vim.cmd([[
   highlight BufferLineBackground guibg=NONE
@@ -45,8 +44,12 @@ vim.cmd([[
   highlight BufferLineTabSeparator guibg=NONE
   highlight BufferLineTabSeparatorSelected guibg=NONE
 ]])
---opt.signcolumn = "yes" -- show sign column so that text doesn't shift
-
+opt.signcolumn = "yes" -- show sign column so that text doesn't shift
+-- Make sign column transparent
+vim.cmd([[
+  highlight SignColumn guibg=NONE ctermbg=NONE
+  highlight link SignColumn LineNr
+]])
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
