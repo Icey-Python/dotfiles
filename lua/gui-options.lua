@@ -26,9 +26,30 @@ opt.cursorline = true -- highlight the current cursor line
 -- (have to use iterm2 or any other true color terminal)
 opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
--- vim.cmd([[highlight Normal guibg=NONE ctermbg=NONE]])
+-- Make split separators transparent
+vim.cmd([[highlight Normal guibg=NONE ctermbg=NONE]])
+vim.cmd([[
+  highlight WinSeparator guibg=NONE guifg=NONE
+]])
+-- Make bufferline transparent
+vim.cmd([[
+  highlight BufferLineBackground guibg=NONE
+  highlight BufferLineFill guibg=NONE
+  highlight BufferLineBufferSelected guibg=NONE
+  highlight BufferLineBuffer guibg=NONE
+  highlight BufferLineSeparator guibg=NONE
+  highlight BufferLineIndicatorSelected guibg=NONE
+  highlight BufferLineTab guibg=NONE
+  highlight BufferLineTabSelected guibg=NONE
+  highlight BufferLineTabSeparator guibg=NONE
+  highlight BufferLineTabSeparatorSelected guibg=NONE
+]])
 opt.signcolumn = "yes" -- show sign column so that text doesn't shift
-
+-- Make sign column transparent
+vim.cmd([[
+  highlight SignColumn guibg=NONE ctermbg=NONE
+  highlight link SignColumn LineNr
+]])
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
