@@ -9,7 +9,7 @@ lsp.ensure_installed({
 	"cssls",
   "clangd",
 	"html",
-	"pyright",
+	"python",
   "dockerls",
 	"bashls",
 	"jsonls",
@@ -18,7 +18,6 @@ lsp.ensure_installed({
 	"rust_analyzer",
 	"tailwindcss",
 	"lua_ls",
-  "dartls"
 })
 
 -- Fix Undefined global 'vim'
