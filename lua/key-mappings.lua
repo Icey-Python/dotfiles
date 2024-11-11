@@ -268,6 +268,9 @@ keymap.set("n", "ve", "<cmd>lua vim.diagnostic.open_float({border='rounded',scop
 keymap.set("n", "<leader>da", "<cmd>lua vim.lsp.buf.code_action()<CR>", { noremap = true, silent = true })
 -- display wakatime today 
 keymap.set("n", "<leader>ct", "<cmd>WakaTimeToday<CR>", { noremap = true, silent = true })
+-- indent code block 
+keymap.set("v", "<S-Right>", ">gv")
+keymap.set("v", "<S-Left>", "<gv")
 
 which_key.setup(setup)
 which_key.register(mappings, opts)
