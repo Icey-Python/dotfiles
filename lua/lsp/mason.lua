@@ -9,7 +9,6 @@ lsp.ensure_installed({
 	"cssls",
   "clangd",
 	"html",
-	"python",
   "dockerls",
 	"bashls",
 	"jsonls",
