@@ -176,7 +176,7 @@ local mappings = {
 	-- Terminal
 	t = {
 		name = "Terminal",
-		n = { "<cmd> terminal<CR>", "new terminal" },
+		n = { "<cmd> terminal", "new terminal" },
 	},
 }
 

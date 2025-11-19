@@ -1,52 +1,51 @@
-local lsp = require("lsp-zero")
+-- Setup Mason
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {
+    'ts_ls',
+    'rust_analyzer',
+    'cssls',
+    'clangd',
+    'html',
+    'dockerls',
+    'bashls',
+    'jsonls',
+    'yamlls',
+    'gopls',
+    'tailwindcss',
+    'lua_ls',
+  },
+})
 
-lsp.preset("recommended")
+-- Setup LSP Zero v1.x
+local lsp = require('lsp-zero')
 
+lsp.preset('recommended')
 
 lsp.ensure_installed({
-	'ts_ls',
-	'rust_analyzer',
-	"cssls",
-  "clangd",
-	"html",
-  "dockerls",
-	"bashls",
-	"jsonls",
-	"yamlls",
-	"gopls",
-	"rust_analyzer",
-	"tailwindcss",
-	"lua_ls",
+  'tsserver',
+  'rust_analyzer',
+  'cssls',
+  'clangd',
+  'html',
+  'dockerls',
+  'bashls',
+  'jsonls',
+  'yamlls',
+  'gopls',
+  'tailwindcss',
+  'sumneko_lua',
 })
 
 -- Fix Undefined global 'vim'
-lsp.nvim_workspace()
-
-
-local cmp = require('cmp')
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
-})
-
-cmp_mappings['<Tab>'] = nil
-cmp_mappings['<S-Tab>'] = nil
-
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
-})
-
-lsp.set_preferences({
-	suggest_lsp_servers = false,
-	sign_icons = {
-		error = '✘',
-		warn = '▲',
-		hint = '⚑',
-		info = '»',
-	}
+lsp.configure('sumneko_lua', {
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
 })
 
 lsp.on_attach(function(client, bufnr)
@@ -64,19 +63,26 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 
--- Formatting
-lsp.format_mapping('<leader>8', {
-  format_opts = {
-    async = false,
-    timeout_ms = 10000,
+lsp.setup()
+
+-- Setup nvim-cmp
+local cmp = require('cmp')
+local cmp_select = {behavior = cmp.SelectBehavior.Select}
+
+cmp.setup({
+  sources = {
+    {name = 'path'},
+    {name = 'nvim_lsp'},
+    {name = 'buffer', keyword_length = 3},
+    {name = 'luasnip', keyword_length = 2},
   },
-  servers = {
-   ['null-ls'] = {"javascript","typescript","typescriptreact","css","html","json","yaml","python","lua","rust","go","bash","markdown"}
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-Space>'] = cmp.mapping.complete(),
   }
 })
-
-
-lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true

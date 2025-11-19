@@ -7,11 +7,11 @@ require("lualine-config")
 require("telescope")
 require("autocompletions")
 --lsp autocomplete:
-require("lsp.mason")
-require("lsp.lspconfig")
-require("lsp.lspsaga")
+-- require("lsp.mason") -- Temporarily disabled
+-- require("lsp.lspconfig") -- Temporarily disabled
+-- require("lsp.lspsaga") -- Temporarily disabled
 -- flutter tools
-require('lsp.flutter-config')
+-- require('lsp.flutter-config') -- Temporarily disabled
 -- formatter
-require("lsp.formatter")
+-- require("lsp.formatter") -- Temporarily disabled
 require("gitsigns")
