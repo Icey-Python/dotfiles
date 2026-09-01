@@ -1,276 +1,169 @@
 -- set leader key to space
 vim.g.mapleader = " "
 local keymap = vim.keymap -- for conciseness
-local status_ok, which_key = pcall(require, "which-key")
+local status_ok, wk = pcall(require, "which-key")
 if not status_ok then
-	return
+  return
 end
 
-local setup = {
-	plugins = {
-		marks = true, -- shows a list of your marks on ' and `
-		registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
-		spelling = {
-			enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-			suggestions = 20, -- how many suggestions should be shown in the list?
-		},
-		-- the presets plugin, adds help for a bunch of default keybindings in Neovim
-		-- No actual key bindings are created
-		presets = {
-			operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-			motions = true, -- adds help for motions
-			text_objects = true, -- help for text objects triggered after entering an operator
-			windows = true, -- default bindings on <c-w>
-			nav = true, -- misc bindings to work with windows
-			z = true, -- bindings for folds, spelling and others prefixed with z
-			g = true, -- bindings for prefixed with g
-		},
-	},
-	-- add operators that will trigger motion and text object completion
-	-- to enable all native operators, set the preset / operators plugin above
-	-- operators = { gc = "Comments" },
-	key_labels = {
-		-- override the label used to display some keys. It doesn't effect WK in any other way.
-		-- For example:
-		-- ["<space>"] = "SPC",
-		-- ["<cr>"] = "RET",
-		-- ["<tab>"] = "TAB",
-	},
-	icons = {
-		breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-		separator = "➜", -- symbol used between a key and it's label
-		group = "+", -- symbol prepended to a group
-	},
-	popup_mappings = {
-		scroll_down = "<c-d>", -- binding to scroll down inside the popup
-		scroll_up = "<c-u>", -- binding to scroll up inside the popup
-	},
-  window = {
-		border = "rounded", -- none, single, double, shadow
-		position = "bottom", -- bottom, top
-		margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
-		padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
-		winblend = 0,
-	},
-	layout = {
-		height = { min = 4, max = 25 }, -- min and max height of the columns
-		width = { min = 20, max = 50 }, -- min and max width of the columns
-		spacing = 3, -- spacing between columns
-		align = "left", -- align columns left, center or right
-	},
-	ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
-	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
-	show_help = true, -- show help message on the command line when the popup is visible
-	triggers = "auto", -- automatically setup triggers
-	-- triggers = {"<leader>"} -- or specify a list manually
-	triggers_blacklist = {
-		-- list of mode / prefixes that should never be hooked by WhichKey
-		-- this is mostly relevant for key maps that start with a native binding
-		-- most people should not need to change this
-		i = { "j", "k" },
-		v = { "j", "k" },
-	},
-}
+-- Modern which-key v3 setup (minimal, no deprecated fields)
+wk.setup({
+  preset = "classic",
+  delay = 200,
+  win = {
+    border = "rounded",
+    padding = { 1, 2 },
+    title = true,
+    title_pos = "center",
+    zindex = 1000,
+  },
+  layout = {
+    width = { min = 20 },
+    spacing = 3,
+  },
+  keys = {
+    scroll_down = "<c-d>",
+    scroll_up = "<c-u>",
+  },
+  icons = {
+    breadcrumb = "»",
+    separator = "➜",
+    group = "+",
+    ellipsis = "…",
+    mappings = true,
+  },
+  plugins = {
+    marks = true,
+    registers = true,
+    spelling = {
+      enabled = true,
+      suggestions = 20,
+    },
+    presets = {
+      operators = false,
+      motions = true,
+      text_objects = true,
+      windows = true,
+      nav = true,
+      z = true,
+      g = true,
+    },
+  },
+  sort = { "local", "order", "group", "alphanum", "mod" },
+  expand = 0,
+  notify = true,
+})
 
-local opts = {
-	mode = "n", -- NORMAL mode
-	prefix = "<leader>",
-	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-	silent = true, -- use `silent` when creating keymaps
-	noremap = true, -- use `noremap` when creating keymaps
-	nowait = true, -- use `nowait` when creating keymaps
-}
+-- Minimal leader groups (no overlapping prefixes)
+-- Singletons: w save, q quit, c close, e explorer, h nohl, b buffers
+-- Groups: a=AI, f=file, g=git, l=lsp, p=packer, s=search, t=terminal/tabs, W=window, r=run
+wk.add({
+  { "<leader>w", "<cmd>w!<CR>", desc = "Save" },
+  { "<leader>q", "<cmd>q!<CR>", desc = "Quit" },
+  { "<leader>c", "<cmd>bdelete!<CR>", desc = "Close Buffer" },
+  { "<leader>e", "<cmd>NvimTreeToggle<CR>", desc = "Explorer" },
+  { "<leader>h", "<cmd>nohlsearch<CR>", desc = "No Highlight" },
+  { "<leader>b", "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer=false})<CR>", desc = "Buffers" },
 
-local mappings = {
-	["a"] = { "<cmd>Alpha<cr>", "Alpha" },
-	["b"] = {
-		"<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-		"Buffers",
-	},
-	["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
-	["w"] = { "<cmd>w!<CR>", "Save" },
-	["q"] = { "<cmd>q!<CR>", "Quit" },
-	["c"] = { "<cmd>bdelete!<CR>", "Close Buffer" },
-	["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
-	["sf"] = {
-		"<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-		"Find files",
-	},
-	-- CHATGPT
-	cg = {
-		name = "ChatGPT",
-		c = { "<cmd>ChatGPT<CR>", "ChatGPT" },
-		e = { "<cmd>ChatGPTEditWithInstruction<CR>", "Edit with instruction", mode = { "n", "v" } },
-		g = { "<cmd>ChatGPTRun grammar_correction<CR>", "Grammar Correction", mode = { "n", "v" } },
-		t = { "<cmd>ChatGPTRun translate<CR>", "Translate", mode = { "n", "v" } },
-		k = { "<cmd>ChatGPTRun keywords<CR>", "Keywords", mode = { "n", "v" } },
-		d = { "<cmd>ChatGPTRun docstring<CR>", "Docstring", mode = { "n", "v" } },
-		a = { "<cmd>ChatGPTRun add_tests<CR>", "Add Tests", mode = { "n", "v" } },
-		o = { "<cmd>ChatGPTRun optimize_code<CR>", "Optimize Code", mode = { "n", "v" } },
-		s = { "<cmd>ChatGPTRun summarize<CR>", "Summarize", mode = { "n", "v" } },
-		f = { "<cmd>ChatGPTRun fix_bugs<CR>", "Fix Bugs", mode = { "n", "v" } },
-		x = { "<cmd>ChatGPTRun explain_code<CR>", "Explain Code", mode = { "n", "v" } },
-		r = { "<cmd>ChatGPTRun roxygen_edit<CR>", "Roxygen Edit", mode = { "n", "v" } },
-		l = { "<cmd>ChatGPTRun code_readability_analysis<CR>", "Code Readability Analysis", mode = { "n", "v" } },
-	},
-	-- Packer
-	p = {
-		name = "Packer",
-		c = { "<cmd>PackerCompile<cr>", "Compile" },
-		i = { "<cmd>PackerInstall<cr>", "Install" },
-		s = { "<cmd>PackerSync<cr>", "Sync" },
-		S = { "<cmd>PackerStatus<cr>", "Status" },
-		u = { "<cmd>PackerUpdate<cr>", "Update" },
-	},
-	-- Git
+  { "<leader>a", group = "AI" },
+  { "<leader>ac", "<cmd>ChatGPT<CR>", desc = "ChatGPT" },
+  { "<leader>ae", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "Edit with instruction", mode = { "n", "v" } },
+  { "<leader>ag", "<cmd>ChatGPTRun grammar_correction<CR>", desc = "Grammar Correction", mode = { "n", "v" } },
+  { "<leader>at", "<cmd>ChatGPTRun translate<CR>", desc = "Translate", mode = { "n", "v" } },
+  { "<leader>ak", "<cmd>ChatGPTRun keywords<CR>", desc = "Keywords", mode = { "n", "v" } },
+  { "<leader>ad", "<cmd>ChatGPTRun docstring<CR>", desc = "Docstring", mode = { "n", "v" } },
+  { "<leader>ao", "<cmd>ChatGPTRun optimize_code<CR>", desc = "Optimize Code", mode = { "n", "v" } },
+  { "<leader>as", "<cmd>ChatGPTRun summarize<CR>", desc = "Summarize", mode = { "n", "v" } },
+  { "<leader>af", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "Fix Bugs", mode = { "n", "v" } },
+  { "<leader>ax", "<cmd>ChatGPTRun explain_code<CR>", desc = "Explain Code", mode = { "n", "v" } },
 
-	g = {
-		name = "Git",
-		o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
-		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-		cs = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
-	},
-	-- Language Server Protocol (LSP)
-	l = {
-		name = "LSP",
-		a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-		d = {
-			"<cmd>Telescope diagnostics bufnr=0<cr>",
-			"Document Diagnostics",
-		},
-		w = {
-			"<cmd>Telescope diagnostics<cr>",
-			"Workspace Diagnostics",
-		},
-		f = { "<cmd>lua vim.lsp.buf.format{async=true}<cr>", "Format" },
-		i = { "<cmd>LspInfo<cr>", "Info" },
-		I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
-		j = {
-			"<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-			"Next Diagnostic",
-		},
-		k = {
-			"<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
-			"Prev Diagnostic",
-		},
-		l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
-		q = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix" },
-		r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
-		s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
-		S = {
-			"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
-			"Workspace Symbols",
-		},
-	},
-	--Telescope
-	s = {
-		name = "Search",
-		c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-		h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
-		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-		r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-		R = { "<cmd>Telescope registers<cr>", "Registers" },
-		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
-		C = { "<cmd>Telescope commands<cr>", "Commands" },
-	},
-	-- Terminal
-	t = {
-		name = "Terminal",
-		n = { "<cmd> terminal<CR>", "new terminal" },
-	},
-}
+  { "<leader>f", group = "File" },
+  { "<leader>ff", "<cmd>Telescope find_files<CR>", desc = "Find files" },
+  { "<leader>fs", "<cmd>Telescope live_grep<CR>", desc = "Live grep" },
+  { "<leader>fc", "<cmd>Telescope grep_string<CR>", desc = "Grep string" },
+  { "<leader>fb", "<cmd>Telescope buffers<CR>", desc = "Buffers" },
+  { "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "Help tags" },
+  { "<leader>fo", "<cmd>Telescope oldfiles<CR>", desc = "Recent files" },
 
----------------------
--- General Keymaps
----------------------
+  { "<leader>g", group = "Git" },
+  { "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "Git status" },
+  { "<leader>gb", "<cmd>Telescope git_branches<CR>", desc = "Branches" },
+  { "<leader>gc", "<cmd>Telescope git_commits<CR>", desc = "Commits" },
+  { "<leader>gf", "<cmd>Telescope git_bcommits<CR>", desc = "File commits" },
 
--- use jk to exit insert mode
-keymap.set("i", "jk", "<ESC>")
+  { "<leader>l", group = "LSP" },
+  { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<CR>", desc = "Code Action" },
+  { "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", desc = "Format" },
+  { "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<CR>", desc = "Rename" },
+  { "<leader>ld", "<cmd>Telescope diagnostics bufnr=0<CR>", desc = "Document Diagnostics" },
+  { "<leader>lw", "<cmd>Telescope diagnostics<CR>", desc = "Workspace Diagnostics" },
+  { "<leader>li", "<cmd>LspInfo<CR>", desc = "Lsp Info" },
+  { "<leader>ls", "<cmd>Telescope lsp_document_symbols<CR>", desc = "Document Symbols" },
+  { "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<CR>", desc = "Quickfix" },
+  { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<CR>", desc = "Prev Diagnostic" },
+  { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<CR>", desc = "Next Diagnostic" },
+  { "<leader>lrR", "<cmd>LspRestart<CR>", desc = "Restart LSP" },
 
--- clear search highlights
-keymap.set("n", "<leader>nh", ":nohl<CR>")
+  { "<leader>p", group = "Packer" },
+  { "<leader>pc", "<cmd>PackerCompile<CR>", desc = "Compile" },
+  { "<leader>pi", "<cmd>PackerInstall<CR>", desc = "Install" },
+  { "<leader>ps", "<cmd>PackerSync<CR>", desc = "Sync" },
+  { "<leader>pS", "<cmd>PackerStatus<CR>", desc = "Status" },
+  { "<leader>pu", "<cmd>PackerUpdate<CR>", desc = "Update" },
 
--- delete single character without copying into register
-keymap.set("n", "x", '"_x')
+  { "<leader>s", group = "Search" },
+  { "<leader>sc", "<cmd>Telescope colorscheme<CR>", desc = "Colorscheme" },
+  { "<leader>sh", "<cmd>Telescope help_tags<CR>", desc = "Help" },
+  { "<leader>sk", "<cmd>Telescope keymaps<CR>", desc = "Keymaps" },
+  { "<leader>sC", "<cmd>Telescope commands<CR>", desc = "Commands" },
+  { "<leader>sr", "<cmd>Telescope registers<CR>", desc = "Registers" },
 
--- increment/decrement numbers
-keymap.set("n", "<leader>+", "<C-a>") -- increment
-keymap.set("n", "<leader>-", "<C-x>") -- decrement
+  { "<leader>t", group = "Terminal/Tabs" },
+  { "<leader>tn", "<cmd>terminal<CR>", desc = "New terminal" },
+  { "<leader>tt", "<cmd>terminal top<CR>", desc = "Top" },
+  { "<leader>to", "<cmd>tabnew<CR>", desc = "New tab" },
+  { "<leader>tx", "<cmd>tabclose<CR>", desc = "Close tab" },
+  { "<leader>tk", "<cmd>tabn<CR>", desc = "Next tab" },
+  { "<leader>tj", "<cmd>tabp<CR>", desc = "Prev tab" },
 
--- window management
-keymap.set("n", "<leader>sv", "<C-w>v") -- split window vertically
-keymap.set("n", "<leader>sh", "<C-w>s") -- split window horizontally
-keymap.set("n", "<leader>se", "<C-w>=") -- make split windows equal width & height
-keymap.set("n", "<leader>sx", ":close<CR>") -- close current split window
+  { "<leader>W", group = "Window" },
+  { "<leader>Wv", "<C-w>v", desc = "Split vertical" },
+  { "<leader>Wh", "<C-w>s", desc = "Split horizontal" },
+  { "<leader>We", "<C-w>=", desc = "Equal splits" },
+  { "<leader>Wx", "<cmd>close<CR>", desc = "Close split" },
+  { "<leader>Wm", "<cmd>MaximizerToggle<CR>", desc = "Maximize" },
 
-keymap.set("n", "<leader>to", ":tabnew<CR>") -- open new tab
-keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab
-keymap.set("n", "<leader>tk", ":tabn<CR>") --  go to next tab
-keymap.set("n", "<leader>tj", ":tabp<CR>") --  go to previous tab
---run python files
-keymap.set("n", "<leader>xp", ":terminal python3")
+  { "<leader>r", group = "Run" },
+  { "<leader>rp", "<cmd>terminal python3 %<CR>", desc = "Run Python" },
+  { "<leader>rc", "<cmd>!g++ -std=c++11 % -o %:r<CR><cmd>! ./%:r<CR>", desc = "Run C++" },
+})
+
 ----------------------
--- Plugin Keybinds
+-- General Keymaps (no leader overlaps)
 ----------------------
+keymap.set("i", "jk", "<ESC>", { noremap = true, silent = true })
+keymap.set("n", "x", '"_x', { noremap = true, silent = true })
+keymap.set("n", "<leader>+", "<C-a>", { noremap = true, silent = true, desc = "Increment" })
+keymap.set("n", "<leader>-", "<C-x>", { noremap = true, silent = true, desc = "Decrement" })
 
--- vim-maximizer
-keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle split window maximization
-
--- nvim-tree
-keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>") -- toggle file explorer
-
--- telescope
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
-keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>") -- find string in current working directory as you type
---keymap.set("n", "<leader>fg", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
-keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>") -- find string under cursor in current working directory
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>") -- list open buffers in current neovim instance
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>") -- list available help tags
-
--- telescope git commands (not on youtube nvim video)
-keymap.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>") -- list all git commits (use <cr> to checkout) ["gc" for git commits]
-keymap.set("n", "<leader>gfc", "<cmd>Telescope git_bcommits<cr>") -- list git commits for current file/buffer (use <cr> to checkout) ["gfc" for git file commits]
-keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>") -- list git branches (use <cr> to checkout) ["gb" for git branch]
-keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>") -- list current changes per file with diff preview ["gs" for git status]
-
--- keymap to open top 
-keymap.set("n","<leader>tp","<cmd>terminal top <CR>")
--- restart lsp server (not on youtube nvim video)
-keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
-
---CPP CODE RUNNER
-keymap.set("n", "<S-x>", ":!g++ -std=c++11 % -o %:r<CR>:! ./%:r<CR>")
-
--- Move line up and down
+-- Move lines
 local line_opts = { noremap = true, silent = true }
-
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", line_opts)
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", line_opts)
-
 vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", line_opts)
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", line_opts)
-
 vim.keymap.set("x", "p", '"_dP', line_opts)
--- change btn buffers
-vim.cmd([[
-nnoremap <silent><TAB> :BufferLineCycleNext<CR>
-]])
 
---formatter
-keymap.set("n", "<leader>f", "<cmd> lua vim.lsp.buf.format()<CR>", { noremap = true, silent = true })
-keymap.set("n", "<leader>fr", "<cmd> :FlutterReload <CR>", { noremap = true, silent = true })
--- go to definition telescope 
-keymap.set("n", "vd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
--- view error 
-keymap.set("n", "ve", "<cmd>lua vim.diagnostic.open_float({border='rounded',scope='line'})<CR>", { noremap = true, silent = true })
+-- Buffers
+vim.keymap.set("n", "<TAB>", "<cmd>BufferLineCycleNext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 
--- code actions Alt + a 
-keymap.set("n", "<leader>da", "<cmd>lua vim.lsp.buf.code_action()<CR>", { noremap = true, silent = true })
--- display wakatime today 
-keymap.set("n", "<leader>ct", "<cmd>WakaTimeToday<CR>", { noremap = true, silent = true })
--- indent code block 
-keymap.set("v", "<S-Right>", ">gv")
-keymap.set("v", "<S-Left>", "<gv")
+-- LSP free keys (non-leader)
+keymap.set("n", "vd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true, desc = "Goto definition" })
+keymap.set("n", "ve", "<cmd>lua vim.diagnostic.open_float({border='rounded', scope='line'})<CR>", { noremap = true, silent = true, desc = "Line diagnostics" })
+keymap.set("n", "<leader>da", "<cmd>lua vim.lsp.buf.code_action()<CR>", { noremap = true, silent = true, desc = "Code action" })
+keymap.set("n", "<leader>fr", "<cmd>FlutterReload<CR>", { noremap = true, silent = true, desc = "Flutter Reload" })
+keymap.set("n", "<leader>ct", "<cmd>WakaTimeToday<CR>", { noremap = true, silent = true, desc = "Waka Today" })
 
-which_key.setup(setup)
-which_key.register(mappings, opts)
+-- Indent
+keymap.set("v", "<S-Right>", ">gv", { noremap = true, silent = true })
+keymap.set("v", "<S-Left>", "<gv", { noremap = true, silent = true })

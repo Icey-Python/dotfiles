@@ -76,7 +76,7 @@ use("nvim-lua/plenary.nvim") -- lua functions that many plugins use
             ts_update()
         end, }
     use("nvim-tree/nvim-tree.lua")
-    use("nvim-treesitter/playground")
+
     use("theprimeagen/harpoon")
     use("theprimeagen/refactoring.nvim")
     use("mbbill/undotree")
@@ -150,16 +150,6 @@ use({
             { 'mlaursen/vim-react-snippets' }
         }
     }
-use {
-  'Exafunction/codeium.vim',
-  config = function ()
-    -- Change '<C-g>' here to any keycode you like.
-    vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-    vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
-    vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
-    vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-  end
-}
   -- configures python syntax highlighting
  -- configuring lsp servers
   -- use("neovim/nvim-lspconfig") -- easily configure language servers

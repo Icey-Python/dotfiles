@@ -4,7 +4,7 @@ require("options")
 require("gui-config")
 require("gui-options")
 require("lualine-config")
-require("telescope")
+require("telescope-config")
 require("autocompletions")
 --lsp autocomplete:
 -- require("lsp.mason") -- Temporarily disabled
@@ -14,4 +14,4 @@ require("autocompletions")
 -- require('lsp.flutter-config') -- Temporarily disabled
 -- formatter
 -- require("lsp.formatter") -- Temporarily disabled
-require("gitsigns")
+require("gitsigns-config")
